@@ -76,6 +76,7 @@ textarea:focus-visible {
   display: none !important;
 }
 
+
 /* =========================
    全体
 ========================= */
@@ -101,6 +102,7 @@ textarea:focus-visible {
 .active-page {
   display: block;
 }
+
 
 /* =========================
    ヘッダー
@@ -129,9 +131,7 @@ textarea:focus-visible {
   letter-spacing: 0.16em;
 }
 
-h1,
-h2,
-p {
+h1,h2,p {
   margin-top: 0;
 }
 
@@ -157,6 +157,7 @@ h2 {
   font-size: 14px;
   line-height: 1.7;
 }
+
 
 /* =========================
    ボタン
@@ -264,6 +265,7 @@ h2 {
   background: var(--accent-soft);
 }
 
+
 /* =========================
    イベント概要
 ========================= */
@@ -316,16 +318,19 @@ h2 {
   font-size: 36px;
 }
 
+
 /* =========================
    チケットカード
 ========================= */
 
 .event-list {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(235px, 1fr)
-  );
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(235px, 1fr)
+    );
 
   gap: 24px;
 }
@@ -617,6 +622,7 @@ h2 {
   color: var(--danger);
 }
 
+
 /* =========================
    詳細ノート画面
 ========================= */
@@ -784,6 +790,7 @@ h2 {
   border-top: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
+
 /* =========================
    予定一覧
 ========================= */
@@ -793,7 +800,9 @@ h2 {
   margin-bottom: 10px;
   padding: 10px 14px;
 
-  border-bottom: 2px solid var(--detail-color, var(--accent));
+  border-bottom:
+    2px solid
+    var(--detail-color, var(--accent));
 
   color: var(--detail-color, var(--accent));
 
@@ -815,7 +824,11 @@ h2 {
 
 .plan-item {
   display: grid;
-  grid-template-columns: 82px minmax(0, 1fr);
+
+  grid-template-columns:
+    82px
+    minmax(0, 1fr);
+
   gap: 17px;
 
   padding: 18px;
@@ -982,6 +995,7 @@ h2 {
   text-align: center;
 }
 
+
 /* =========================
    空状態・仮画面
 ========================= */
@@ -1052,6 +1066,7 @@ h2 {
   line-height: 1.8;
 }
 
+
 /* =========================
    設定
 ========================= */
@@ -1104,6 +1119,7 @@ h2 {
   font-size: 10px;
   font-weight: 700;
 }
+
 
 /* =========================
    下部ナビゲーション
@@ -1175,6 +1191,7 @@ h2 {
   font-weight: 700;
 }
 
+
 /* =========================
    モーダル
 ========================= */
@@ -1217,7 +1234,8 @@ h2 {
     ),
     var(--surface);
 
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.45);
 }
 
 .small-modal {
@@ -1237,6 +1255,7 @@ h2 {
   margin-bottom: 0;
 }
 
+
 /* =========================
    フォーム
 ========================= */
@@ -1247,7 +1266,11 @@ h2 {
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
   gap: 14px;
 }
 
@@ -1348,6 +1371,7 @@ h2 {
   line-height: 1.7;
 }
 
+
 /* =========================
    スマホ対応
 ========================= */
@@ -1355,6 +1379,13 @@ h2 {
 @media (max-width: 600px) {
   :root {
     --bottom-nav-height: 76px;
+  }
+
+  /* iPhoneで入力時に自動ズームされるのを防ぐ */
+  .form-group input:not([type="color"]),
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px;
   }
 
   .main-content {
@@ -1455,6 +1486,25 @@ h2 {
     gap: 0;
   }
 
+
+  /* iPhoneの日時入力欄の幅をモーダル内に収める */
+
+  .form-group input[type="date"],
+  .form-group input[type="time"] {
+    width: 100%;
+
+    min-width: 0;
+    max-width: 92%;
+
+    min-height: 18px;
+    height: 18px;
+
+    padding: 8px 10px;
+
+    font-size: 13px;
+  }
+
+
   .modal-overlay {
     align-items: flex-end;
     padding: 0;
@@ -1483,15 +1533,23 @@ h2 {
   }
 }
 
+
 /* =========================
    Phase 3 精算帳
 ========================= */
 .settlement-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
   gap: 14px;
   margin-bottom: 24px;
 }
+
 .money-summary-card,
 .settlement-event-card,
 .people-manager {
@@ -1500,43 +1558,263 @@ h2 {
   border-radius: 18px;
   background: var(--surface);
 }
+
 .money-summary-card span {
-  display:block;
-  color:var(--text-sub);
-  font-size:12px;
-  margin-bottom:8px;
-}
-.money-summary-card strong {
-  font-size:24px;
-  color:var(--accent);
-}
-.settlement-list { display:flex; flex-direction:column; gap:16px; }
-.settlement-event-card h3 { margin:0 0 10px; font-size:18px; }
-.settlement-event-meta { color:var(--text-sub); font-size:13px; margin-bottom:15px; }
-.payment-row {
-  display:flex; justify-content:space-between; gap:12px; align-items:center;
-  padding:12px 0; border-top:1px solid var(--border); font-size:13px;
-}
-.payment-row strong { white-space:nowrap; }
-.payment-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
-.inline-form { display:flex; gap:10px; margin:18px 0; }
-.inline-form input { flex:1; min-width:0; }
-.people-list { display:flex; flex-direction:column; gap:8px; }
-.person-row { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border:1px solid var(--border); border-radius:12px; }
-.person-row span { font-weight:700; }
-.person-row small { color:var(--text-sub); }
-.payment-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-.payment-form-grid .full { grid-column:1/-1; }
-.payment-targets { display:flex; flex-wrap:wrap; gap:8px; }
-.payment-targets label { display:flex; gap:6px; align-items:center; padding:8px 10px; border:1px solid var(--border); border-radius:10px; }
-@media (max-width: 600px) {
-  .settlement-summary { grid-template-columns:1fr; }
-  .payment-form-grid { grid-template-columns:1fr; }
-  .inline-form { flex-direction:column; }
+  display: block;
+  color: var(--text-sub);
+  font-size: 12px;
+  margin-bottom: 8px;
 }
 
-/* Phase 3 revised */
-.plan-settlement-grid{display:grid;gap:12px}.plan-settlement-grid label{display:flex;gap:8px;align-items:center}.form-help{font-size:.82rem;color:var(--text-sub,#888)}.plan-money-line{font-size:.85rem;color:var(--text-sub,#888);margin-top:6px}.settlement-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.money-summary-card small{display:block;margin-top:6px;color:var(--text-sub,#888)}.note-paper{display:grid;grid-template-columns:1fr 1fr;gap:0}.note-paper>.note-section{padding:28px}.note-paper>.note-divider{width:1px;height:auto;min-height:100%;background:var(--border,#ddd);margin:0}.note-paper>#detail-money-section{grid-column:1 / -1;border-top:1px dashed var(--border,#ddd)}@media(max-width:700px){.note-paper{display:block}.note-paper>.note-divider{width:100%;height:1px;min-height:0}.note-paper>.note-section{padding:20px 0}.note-paper>#detail-money-section{padding:20px 0}}
+
+.money-summary-card strong {
+  font-size: 24px;
+  color: var(--accent);
+}
+
+.settlement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settlement-event-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.settlement-event-meta {
+  color: var(--text-sub);
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 0;
+
+  border-top: 1px solid var(--border);
+
+  font-size: 13px;
+}
+
+.payment-row strong {
+  white-space: nowrap;
+}
+
+.payment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.inline-form {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.inline-form input {
+  flex: 1;
+  min-width: 0;
+}
+
+.people-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.person-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 12px 14px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.person-row span {
+  font-weight: 700;
+}
+
+.person-row small {
+  color: var(--text-sub);
+}
+
+.payment-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+}
+
+.payment-form-grid .full {
+  grid-column: 1 / -1;
+}
+
+.payment-targets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.payment-targets label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 10px;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+/* 支払対象者のチェックボックス */
+.payment-targets input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+
+  .settlement-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-form {
+    flex-direction: column;
+  }
+}
+
+
+/* =========================
+   Phase 3 revised
+========================= */
+
+.plan-settlement-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.plan-settlement-grid label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 精算設定のチェックボックス */
+.plan-settlement-grid input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+
+  flex: 0 0 auto;
+
+  margin: 0;
+}
+
+.form-help {
+  color: var(--text-sub, #888);
+  font-size: 0.82rem;
+}
+
+.plan-money-line {
+  margin-top: 6px;
+
+  color: var(--text-sub, #888);
+
+  font-size: 0.85rem;
+}
+
+.settlement-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(150px, 1fr)
+    );
+  gap: 12px;
+}
+
+.money-summary-card small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: var(--text-sub, #888);
+}
+
+.note-paper {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 0;
+}
+
+.note-paper > .note-section {
+  padding: 28px;
+}
+
+.note-paper > .note-divider {
+  width: 1px;
+  height: auto;
+  min-height: 100%;
+
+  margin: 0;
+
+  background: var(--border, #ddd);
+}
+
+.note-paper > #detail-money-section {
+  grid-column: 1 / -1;
+
+  border-top: 1px dashed var(--border, #ddd);
+}
+
+@media (max-width: 700px) {
+
+  .note-paper {
+    display: block;
+  }
+
+  .note-paper > .note-divider {
+    width: 100%;
+    height: 1px;
+    min-height: 0;
+  }
+
+  .note-paper > .note-section {
+    padding: 20px 0;
+  }
+
+  .note-paper > #detail-money-section {
+    padding: 20px 0;
+  }
+}
+
 .settle-toggle-button {
   margin-top: 10px;
   border: 1px solid var(--accent);
@@ -1546,9 +1824,82 @@ h2 {
   padding: 8px 12px;
   cursor: pointer;
 }
-.settlement-event-card.is-settled { opacity: .65; }
-.settlement-event-card.is-settled .settle-toggle-button { border-color: var(--border); background: transparent; }
-.person-summary-card{border:1px solid var(--border,#ddd);background:var(--surface,#fff);color:var(--text,#222);text-align:left;cursor:pointer;padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:4px}.person-summary-card em{font-size:.75rem;color:var(--text-sub,#888);font-style:normal}.person-summary-card[aria-expanded="true"]{outline:2px solid #245eff}.settlement-help{color:var(--text-sub,#888)}.person-detail-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.detail-budget-total{font-size:.75em;font-weight:600;color:#245eff;margin-left:8px;white-space:nowrap}@media(max-width:700px){.detail-budget-total{display:block;margin:6px 0 0;font-size:.85em}}
+
+.settlement-event-card.is-settled {
+  opacity: 0.65;
+}
+
+.settlement-event-card.is-settled .settle-toggle-button {
+  border-color: var(--border);
+
+  background: transparent;
+}
+
+.person-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 14px;
+
+  border: 1px solid var(--border, #ddd);
+  border-radius: 12px;
+
+  background: var(--surface, #fff);
+  color: var(--text, #222);
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.person-summary-card em {
+  color: var(--text-sub, #888);
+
+  font-size: 0.75rem;
+
+  font-style: normal;
+}
+
+.person-summary-card[aria-expanded="true"] {
+  outline: 2px solid #245eff;
+}
+
+.settlement-help {
+  color: var(--text-sub, #888);
+}
+
+.person-detail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+.detail-budget-total {
+  margin-left: 8px;
+
+  color: #245eff;
+
+  font-size: 0.75em;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+
+  .detail-budget-total {
+    display: block;
+
+    margin: 6px 0 0;
+
+    font-size: 0.85em;
+  }
+}
+
 
 /* =========================
    日付・時刻入力
