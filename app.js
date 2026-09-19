@@ -3,7 +3,6 @@
 /* =========================
    設定
 ========================= */
-
 const STORAGE_KEY = "enshinNoteData";
 
 const STATUS_LABELS = {
@@ -27,10 +26,10 @@ const RESERVATION_LABELS = {
   not_required: "予約不要"
 };
 
+
 /* =========================
    アプリデータ
 ========================= */
-
 let appData = {
   events: [],
   people: [],
@@ -43,179 +42,85 @@ let currentEventId = null;
 let deleteTargetEventId = null;
 let deleteTargetPlanId = null;
 
+
 /* =========================
    DOM
 ========================= */
-
-const eventListElement =
-  document.getElementById("event-list");
-
-const emptyEventMessageElement =
-  document.getElementById("empty-event-message");
-
-const eventCountElement =
-  document.getElementById("event-count");
-
-const eventModalElement =
-  document.getElementById("event-modal");
-
-const memoModalElement =
-  document.getElementById("memo-modal");
-
-const planModalElement =
-  document.getElementById("plan-modal");
-
-const deletePlanModalElement =
-  document.getElementById("delete-plan-modal");
-
-const eventFormElement =
-  document.getElementById("event-form");
-
-const memoFormElement =
-  document.getElementById("memo-form");
-
-const planFormElement =
-  document.getElementById("plan-form");
+const eventListElement = document.getElementById("event-list");
+const emptyEventMessageElement = document.getElementById("empty-event-message");
+const eventCountElement = document.getElementById("event-count");
+const eventModalElement = document.getElementById("event-modal");
+const memoModalElement = document.getElementById("memo-modal");
+const planModalElement = document.getElementById("plan-modal");
+const deletePlanModalElement = document.getElementById("delete-plan-modal");
+const eventFormElement = document.getElementById("event-form");
+const memoFormElement = document.getElementById("memo-form");
+const planFormElement = document.getElementById("plan-form");
 
 /* イベントフォーム */
-const modalTitleElement =
-  document.getElementById("modal-title");
-
-const eventIdInput =
-  document.getElementById("event-id");
-
-const eventTitleInput =
-  document.getElementById("event-title");
-
-const eventStartDateInput =
-  document.getElementById("event-start-date");
-
-const eventEndDateInput =
-  document.getElementById("event-end-date");
-
-const eventLocationInput =
-  document.getElementById("event-location");
-
-const eventStatusInput =
-  document.getElementById("event-status");
-
-const eventColorInput =
-  document.getElementById("event-color");
-
-const colorValueElement =
-  document.getElementById("color-value");
-
-const eventMemoInput =
-  document.getElementById("event-memo");
+const modalTitleElement = document.getElementById("modal-title");
+const eventIdInput = document.getElementById("event-id");
+const eventTitleInput = document.getElementById("event-title");
+const eventStartDateInput = document.getElementById("event-start-date");
+const eventEndDateInput = document.getElementById("event-end-date");
+const eventLocationInput = document.getElementById("event-location");
+const eventStatusInput = document.getElementById("event-status");
+const eventColorInput = document.getElementById("event-color");
+const colorValueElement = document.getElementById("color-value");
+const eventMemoInput = document.getElementById("event-memo");
 
 /* 詳細画面 */
-const detailCoverElement =
-  document.getElementById("detail-cover");
-
-const detailEventNumberElement =
-  document.getElementById("detail-event-number");
-
-const detailEventTitleElement =
-  document.getElementById("detail-event-title");
-
-const detailEventDateElement =
-  document.getElementById("detail-event-date");
-
-const detailEventLocationElement =
-  document.getElementById("detail-event-location");
-
-const detailEventStatusElement =
-  document.getElementById("detail-event-status");
-
-const detailEventMemoElement =
-  document.getElementById("detail-event-memo");
-
-const planListElement =
-  document.getElementById("plan-list");
-
-const emptyPlanMessageElement =
-  document.getElementById("empty-plan-message");
+const detailCoverElement = document.getElementById("detail-cover");
+const detailEventNumberElement = document.getElementById("detail-event-number");
+const detailEventTitleElement = document.getElementById("detail-event-title");
+const detailEventDateElement = document.getElementById("detail-event-date");
+const detailEventLocationElement = document.getElementById("detail-event-location");
+const detailEventStatusElement = document.getElementById("detail-event-status");
+const detailEventMemoElement = document.getElementById("detail-event-memo");
+const planListElement = document.getElementById("plan-list");
+const emptyPlanMessageElement = document.getElementById("empty-plan-message");
 
 /* メモフォーム */
-const memoInput =
-  document.getElementById("memo-input");
+const memoInput = document.getElementById("memo-input");
 
 /* 予定フォーム */
-const planModalTitleElement =
-  document.getElementById("plan-modal-title");
+const planModalTitleElement = document.getElementById("plan-modal-title");
+const planIdInput = document.getElementById("plan-id");
+const planTitleInput = document.getElementById("plan-title");
+const planTypeInput = document.getElementById("plan-type");
+const planDateInput = document.getElementById("plan-date");
+const planStartTimeInput = document.getElementById("plan-start-time");
+const planEndTimeInput = document.getElementById("plan-end-time");
+const normalPlanFields = document.getElementById("normal-plan-fields");
+const hotelPlanFields = document.getElementById("hotel-plan-fields");
+const hotelCheckinDateInput = document.getElementById("hotel-checkin-date");
+const hotelCheckinTimeInput = document.getElementById("hotel-checkin-time");
+const hotelCheckoutDateInput = document.getElementById("hotel-checkout-date");
+const hotelCheckoutTimeInput = document.getElementById("hotel-checkout-time");
+const planLocationInput = document.getElementById("plan-location");
+const planReservationStatusInput = document.getElementById("plan-reservation-status");
+const planReservationSiteInput = document.getElementById("plan-reservation-site");
+const planReservationNumberInput = document.getElementById("plan-reservation-number");
+const planAmountInput = document.getElementById("plan-amount");
+const planMemoInput = document.getElementById("plan-memo");
 
-const planIdInput =
-  document.getElementById("plan-id");
-
-const planTitleInput =
-  document.getElementById("plan-title");
-
-const planTypeInput =
-  document.getElementById("plan-type");
-
-const planDateInput =
-  document.getElementById("plan-date");
-
-const planStartTimeInput =
-  document.getElementById("plan-start-time");
-
-const planEndTimeInput =
-  document.getElementById("plan-end-time");
-
-const normalPlanFields =
-  document.getElementById("normal-plan-fields");
-
-const hotelPlanFields =
-  document.getElementById("hotel-plan-fields");
-
-const hotelCheckinDateInput =
-  document.getElementById("hotel-checkin-date");
-
-const hotelCheckinTimeInput =
-  document.getElementById("hotel-checkin-time");
-
-const hotelCheckoutDateInput =
-  document.getElementById("hotel-checkout-date");
-
-const hotelCheckoutTimeInput =
-  document.getElementById("hotel-checkout-time");
-
-const planLocationInput =
-  document.getElementById("plan-location");
-
-const planReservationStatusInput =
-  document.getElementById("plan-reservation-status");
-
-const planReservationSiteInput =
-  document.getElementById("plan-reservation-site");
-
-const planReservationNumberInput =
-  document.getElementById("plan-reservation-number");
-
-const planAmountInput =
-  document.getElementById("plan-amount");
-
-const planMemoInput =
-  document.getElementById("plan-memo");
 
 /* =========================
    初期化
 ========================= */
-
 document.addEventListener("DOMContentLoaded", () => {
   loadData();
   setupEventListeners();
   renderEvents();
 });
 
+
 /* =========================
    イベントリスナー
 ========================= */
-
 function setupEventListeners() {
-  /*
-   * イベント作成
-   */
+
+  // イベント作成
   document
     .getElementById("open-create-event-button")
     .addEventListener("click", () => {
@@ -228,9 +133,8 @@ function setupEventListeners() {
       openCreateEventModal();
     });
 
-  /*
-   * イベントフォーム
-   */
+
+  // イベントフォーム
   eventFormElement.addEventListener("submit", (event) => {
     event.preventDefault();
     saveEventFromForm();
@@ -244,16 +148,14 @@ function setupEventListeners() {
     .getElementById("cancel-modal-button")
     .addEventListener("click", closeEventModal);
 
-  /*
-   * 色表示
-   */
+
+  // 色表示
   eventColorInput.addEventListener("input", () => {
     updateColorValue();
   });
 
-  /*
-   * 下部タブ
-   */
+
+  // 下部タブ
   document
     .querySelectorAll(".nav-button")
     .forEach((button) => {
@@ -262,9 +164,7 @@ function setupEventListeners() {
       });
     });
 
-  /*
-   * 詳細画面
-   */
+  // 詳細画面
   document
     .getElementById("back-to-events-button")
     .addEventListener("click", () => {
@@ -292,9 +192,7 @@ function setupEventListeners() {
       openCreatePlanModal();
     });
 
-  /*
-   * メモモーダル
-   */
+  // メモモーダル
   memoFormElement.addEventListener("submit", (event) => {
     event.preventDefault();
     saveMemo();
@@ -308,9 +206,7 @@ function setupEventListeners() {
     .getElementById("cancel-memo-button")
     .addEventListener("click", closeMemoModal);
 
-  /*
-   * 予定フォーム
-   */
+  // 予定フォーム
   planFormElement.addEventListener("submit", (event) => {
     event.preventDefault();
     savePlanFromForm();
@@ -324,9 +220,7 @@ function setupEventListeners() {
     .getElementById("cancel-plan-modal-button")
     .addEventListener("click", closePlanModal);
 
-  /*
-   * 予定削除モーダル
-   */
+  // 予定削除モーダル
   document
     .getElementById("close-delete-plan-modal-button")
     .addEventListener("click", closeDeletePlanModal);
@@ -339,9 +233,7 @@ function setupEventListeners() {
     .getElementById("confirm-delete-plan-button")
     .addEventListener("click", deletePlan);
 
-  /*
-   * モーダル外側クリック
-   */
+  // モーダル外側クリック
   eventModalElement.addEventListener("click", (event) => {
     if (event.target === eventModalElement) {
       closeEventModal();
@@ -366,9 +258,7 @@ function setupEventListeners() {
     }
   });
 
-  /*
-   * Escapeキー
-   */
+  // Escapeキー
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
@@ -381,13 +271,12 @@ function setupEventListeners() {
   });
 }
 
+
 /* =========================
    データ保存・読み込み
 ========================= */
-
 function loadData() {
-  const savedData =
-    localStorage.getItem(STORAGE_KEY);
+  const savedData = localStorage.getItem(STORAGE_KEY);
 
   if (!savedData) {
     appData = createEmptyAppData();
@@ -411,10 +300,7 @@ function loadData() {
       }
     };
 
-    /*
-     * Phase 1で作成したイベントに、
-     * Phase 2用の配列がない場合に補う。
-     */
+    // Phase 1で作成したイベントに、Phase 2用の配列がない場合に補う。
     appData.events.forEach((event) => {
       if (!Array.isArray(event.plans)) {
         event.plans = [];
@@ -459,10 +345,10 @@ function saveData() {
   );
 }
 
+
 /* =========================
    イベント一覧
 ========================= */
-
 function renderEvents() {
   eventListElement.innerHTML = "";
 
@@ -492,30 +378,22 @@ function renderEvents() {
 }
 
 function createEventCard(event) {
-  const card =
-    document.createElement("article");
-
-  const eventColor =
-    event.color || "#245EFF";
-
-  const statusLabel =
-    STATUS_LABELS[event.status] || "準備中";
+  const card = document.createElement("article");
+  const eventColor = event.color || "#245EFF";
+  const statusLabel = STATUS_LABELS[event.status] || "準備中";
 
   card.className = "event-card";
-
   card.style.setProperty(
     "--card-color",
     eventColor
   );
 
-  const visualArea =
-    document.createElement("div");
+  const visualArea = document.createElement("div");
 
   visualArea.className = "ticket-visual";
 
   if (event.image) {
-    const image =
-      document.createElement("img");
+    const image = document.createElement("img");
 
     image.className = "ticket-image";
     image.src = event.image;
@@ -523,52 +401,33 @@ function createEventCard(event) {
 
     visualArea.appendChild(image);
   } else {
-    const placeholder =
-      document.createElement("div");
+    const placeholder = document.createElement("div");
 
-    placeholder.className =
-      "visual-placeholder";
-
+    placeholder.className = "visual-placeholder";
     placeholder.textContent = "✦";
 
     visualArea.appendChild(placeholder);
   }
 
-  const divider =
-    document.createElement("div");
-
+  const divider = document.createElement("div");
   divider.className = "ticket-divider";
 
-  const info =
-    document.createElement("div");
-
+  const info = document.createElement("div");
   info.className = "ticket-info";
 
-  const number =
-    document.createElement("div");
-
+  const number = document.createElement("div");
   number.className = "ticket-number";
+  number.textContent = `EVENT No.${String(event.number).padStart(3, "0")}`;
 
-  number.textContent =
-    `EVENT No.${String(event.number).padStart(3, "0")}`;
-
-  const title =
-    document.createElement("div");
-
+  const title = document.createElement("div");
   title.className = "ticket-title";
-  title.textContent =
-    event.title || "名称未設定イベント";
+  title.textContent = event.title || "名称未設定イベント";
 
-  const meta =
-    document.createElement("div");
-
+  const meta = document.createElement("div");
   meta.className = "ticket-meta";
 
-  const dateRow =
-    document.createElement("div");
-
+  const dateRow = document.createElement("div");
   dateRow.className = "ticket-meta-row";
-
   dateRow.innerHTML = `
     <span class="meta-icon">▣</span>
     <span>${escapeHtml(
@@ -579,11 +438,8 @@ function createEventCard(event) {
     )}</span>
   `;
 
-  const locationRow =
-    document.createElement("div");
-
+  const locationRow = document.createElement("div");
   locationRow.className = "ticket-meta-row";
-
   locationRow.innerHTML = `
     <span class="meta-icon">⌖</span>
     <span>${escapeHtml(
@@ -594,50 +450,33 @@ function createEventCard(event) {
   meta.appendChild(dateRow);
   meta.appendChild(locationRow);
 
-  const bottom =
-    document.createElement("div");
-
+  const bottom = document.createElement("div");
   bottom.className = "ticket-bottom";
 
-  const status =
-    document.createElement("span");
-
+  const status = document.createElement("span");
   status.className = "status-badge";
-
   status.innerHTML = `
     <span class="status-dot"></span>
     <span>${statusLabel}</span>
   `;
 
-  const actions =
-    document.createElement("div");
-
+  const actions = document.createElement("div");
   actions.className = "card-actions";
 
-  const editButton =
-    document.createElement("button");
-
+  const editButton = document.createElement("button");
   editButton.type = "button";
-  editButton.className =
-    "card-action-button";
-
+  editButton.className = "card-action-button";
   editButton.textContent = "✎";
   editButton.title = "編集";
-
   editButton.addEventListener("click", () => {
     openEditEventModal(event.id);
   });
 
-  const deleteButton =
-    document.createElement("button");
-
+  const deleteButton = document.createElement("button");
   deleteButton.type = "button";
-  deleteButton.className =
-    "card-action-button delete";
-
+  deleteButton.className = "card-action-button delete";
   deleteButton.textContent = "×";
   deleteButton.title = "削除";
-
   deleteButton.addEventListener("click", () => {
     deleteEvent(event.id);
   });
@@ -657,31 +496,26 @@ function createEventCard(event) {
   card.appendChild(divider);
   card.appendChild(info);
 
-  /*
-   * Phase 2では、カードを押すと詳細画面へ移動
-   */
+
+  // Phase 2では、カードを押すと詳細画面へ移動
   card.addEventListener("click", (eventObject) => {
-    if (
-      eventObject.target.closest(
+    if (eventObject.target.closest(
         ".card-action-button"
       )
     ) {
       return;
     }
-
     openEventDetail(event.id);
   });
-
   return card;
 }
+
 
 /* =========================
    イベント詳細
 ========================= */
-
 function openEventDetail(eventId) {
-  const event =
-    findEventById(eventId);
+  const event = findEventById(eventId);
 
   if (!event) {
     return;
@@ -690,47 +524,34 @@ function openEventDetail(eventId) {
   currentEventId = eventId;
 
   renderEventDetail(event);
-
   switchPage("detail-page");
 }
 
 function renderEventDetail(event) {
-  const eventColor =
-    event.color || "#245EFF";
-
-  const statusLabel =
-    STATUS_LABELS[event.status] || "準備中";
+  const eventColor = event.color || "#245EFF";
+  const statusLabel = STATUS_LABELS[event.status] || "準備中";
 
   detailCoverElement.style.setProperty(
     "--detail-color",
     eventColor
   );
 
-  detailEventNumberElement.textContent =
-    `No.${String(event.number).padStart(3, "0")}`;
-
-  detailEventTitleElement.textContent =
-    event.title || "名称未設定イベント";
-
+  detailEventNumberElement.textContent = `No.${String(event.number).padStart(3, "0")}`;
+  detailEventTitleElement.textContent = event.title || "名称未設定イベント";
   detailEventDateElement.textContent =
     formatDateRange(
       event.startDate,
       event.endDate
     );
 
-  detailEventLocationElement.textContent =
-    event.location || "場所未設定";
-
-  detailEventStatusElement.textContent =
-    statusLabel;
-
+  detailEventLocationElement.textContent = event.location || "場所未設定";
+  detailEventStatusElement.textContent = statusLabel;
   detailEventStatusElement.style.setProperty(
     "--card-color",
     eventColor
   );
 
-  detailEventMemoElement.textContent =
-    event.memo || "まだメモはありません。";
+  detailEventMemoElement.textContent = event.memo || "まだメモはありません。";
 
   renderPlans(event);
 }
@@ -788,11 +609,8 @@ function renderPlans(event) {
 
   // 日付 → 時刻の順で並べる
   displayPlans.sort((a, b) => {
-    const dateA =
-      `${a.displayDate || "9999-99-99"} ${a.displayTime || "99:99"}`;
-
-    const dateB =
-      `${b.displayDate || "9999-99-99"} ${b.displayTime || "99:99"}`;
+    const dateA = `${a.displayDate || "9999-99-99"} ${a.displayTime || "99:99"}`;
+    const dateB = `${b.displayDate || "9999-99-99"} ${b.displayTime || "99:99"}`;
 
     return dateA.localeCompare(dateB);
   });
@@ -803,12 +621,8 @@ function renderPlans(event) {
     if (displayPlan.displayDate !== currentDate) {
       currentDate = displayPlan.displayDate;
 
-      const dateHeader =
-        document.createElement("div");
-
-      dateHeader.className =
-        "schedule-date-header";
-
+      const dateHeader = document.createElement("div");
+      dateHeader.className = "schedule-date-header";
       dateHeader.textContent =
         formatScheduleDate(
           displayPlan.displayDate
@@ -847,21 +661,15 @@ function renderPlans(event) {
 }
 
 function createPlanElement(plan, event) {
-  const item =
-    document.createElement("article");
-
+  const item = document.createElement("article");
   item.className = "plan-item";
-
   item.style.setProperty(
     "--detail-color",
     event.color || "#245EFF"
   );
 
-  const time =
-    document.createElement("div");
-
+  const time = document.createElement("div");
   time.className = "plan-time";
-
   time.innerHTML = `
     <div>${escapeHtml(
       formatTimeRange(
@@ -871,26 +679,18 @@ function createPlanElement(plan, event) {
     )}</div>
   `;
 
-  const content =
-    document.createElement("div");
-
+  const content = document.createElement("div");
   content.className = "plan-content";
 
-  const titleRow =
-    document.createElement("div");
-
+  const titleRow = document.createElement("div");
   titleRow.className = "plan-title-row";
 
-  const title =
-    document.createElement("h3");
-
+  const title = document.createElement("h3");
   title.className = "plan-title";
   title.textContent =
     plan.title || "名称未設定";
 
-  const typeBadge =
-    document.createElement("span");
-
+  const typeBadge = document.createElement("span");
   typeBadge.className =
     `plan-type-badge ${
       plan.type === "hotel"
@@ -898,64 +698,43 @@ function createPlanElement(plan, event) {
         : ""
     }`;
 
-  typeBadge.textContent =
-    PLAN_TYPE_LABELS[plan.type] || "その他";
+    typeBadge.textContent = PLAN_TYPE_LABELS[plan.type] || "その他";
 
   titleRow.appendChild(title);
   titleRow.appendChild(typeBadge);
 
-  const meta =
-    document.createElement("div");
-
+  const meta = document.createElement("div");
   meta.className = "plan-meta";
 
   if (plan.location) {
-    const location =
-      document.createElement("span");
-
-    location.textContent =
-      `⌖ ${plan.location}`;
+    const location = document.createElement("span");
+    location.textContent = `⌖ ${plan.location}`;
 
     meta.appendChild(location);
   }
 
   if (plan.reservationSite) {
-    const site =
-      document.createElement("span");
-
-    site.textContent =
-      `予約サイト：${plan.reservationSite}`;
+    const site = document.createElement("span");
+    site.textContent = `予約サイト：${plan.reservationSite}`;
 
     meta.appendChild(site);
   }
 
   if (plan.reservationNumber) {
-    const number =
-      document.createElement("span");
-
-    number.textContent =
-      `予約番号：${plan.reservationNumber}`;
+    const number = document.createElement("span");
+    number.textContent = `予約番号：${plan.reservationNumber}`;
 
     meta.appendChild(number);
   }
 
-  const reservation =
-    document.createElement("div");
+  const reservation = document.createElement("div");
+  reservation.className = "plan-reservation";
 
-  reservation.className =
-    "plan-reservation";
+  const reservationBadge = document.createElement("span");
 
-  const reservationBadge =
-    document.createElement("span");
+  const reservationClass = getReservationClass(plan.reservationStatus);
 
-  const reservationClass =
-    getReservationClass(
-      plan.reservationStatus
-    );
-
-  reservationBadge.className =
-    `reservation-badge ${reservationClass}`;
-
+  reservationBadge.className = `reservation-badge ${reservationClass}`;
   reservationBadge.textContent =
     RESERVATION_LABELS[
       plan.reservationStatus
@@ -965,11 +744,8 @@ function createPlanElement(plan, event) {
     reservationBadge
   );
 
-  const memo =
-    document.createElement("p");
-
+  const memo = document.createElement("p");
   memo.className = "plan-memo";
-
   memo.textContent =
     plan.memo || "";
 
@@ -977,14 +753,10 @@ function createPlanElement(plan, event) {
     memo.classList.add("hidden");
   }
 
-  const bottom =
-    document.createElement("div");
-
+  const bottom = document.createElement("div");
   bottom.className = "plan-bottom";
 
-  const amount =
-    document.createElement("span");
-
+  const amount = document.createElement("span");
   amount.className = "plan-amount";
 
   if (
@@ -998,33 +770,21 @@ function createPlanElement(plan, event) {
     amount.textContent = "";
   }
 
-  const actions =
-    document.createElement("div");
-
+  const actions = document.createElement("div");
   actions.className = "plan-actions";
 
-  const editButton =
-    document.createElement("button");
-
+  const editButton = document.createElement("button");
   editButton.type = "button";
-  editButton.className =
-    "plan-action-button";
-
+  editButton.className = "plan-action-button";
   editButton.textContent = "編集";
-
   editButton.addEventListener("click", () => {
     openEditPlanModal(plan.id);
   });
 
-  const deleteButton =
-    document.createElement("button");
-
+  const deleteButton = document.createElement("button");
   deleteButton.type = "button";
-  deleteButton.className =
-    "plan-action-button delete";
-
+  deleteButton.className = "plan-action-button delete";
   deleteButton.textContent = "削除";
-
   deleteButton.addEventListener("click", () => {
     openDeletePlanModal(plan.id);
   });
@@ -1048,22 +808,16 @@ function createPlanElement(plan, event) {
 }
 
 function createHotelPlanElement(plan, event) {
-  const item =
-    document.createElement("article");
-
+  const item = document.createElement("article");
   item.className = "plan-item";
-
   item.style.setProperty(
     "--detail-color",
     event.color || "#245EFF"
   );
 
   // 時刻
-  const time =
-    document.createElement("div");
-
+  const time = document.createElement("div");
   time.className = "plan-time";
-
   time.innerHTML = `
     <div>${escapeHtml(
       plan.displayTime || "--:--"
@@ -1071,34 +825,19 @@ function createHotelPlanElement(plan, event) {
   `;
 
   // 内容
-  const content =
-    document.createElement("div");
-
-  content.className =
-    "plan-content";
+  const content = document.createElement("div");
+  content.className = "plan-content";
 
   // タイトル＋タグ
-  const titleRow =
-    document.createElement("div");
+  const titleRow = document.createElement("div");
+  titleRow.className = "plan-title-row";
 
-  titleRow.className =
-    "plan-title-row";
+  const title = document.createElement("h3");
+  title.className = "plan-title";
+  title.textContent = plan.title || "宿泊";
 
-  const title =
-    document.createElement("h3");
-
-  title.className =
-    "plan-title";
-
-  title.textContent =
-    plan.title || "宿泊";
-
-  const typeBadge =
-    document.createElement("span");
-
-  typeBadge.className =
-    "plan-type-badge hotel";
-
+  const typeBadge = document.createElement("span");
+  typeBadge.className = "plan-type-badge hotel";
   typeBadge.textContent =
     plan.displayKind === "checkin"
       ? "チェックイン"
@@ -1108,60 +847,39 @@ function createHotelPlanElement(plan, event) {
   titleRow.appendChild(typeBadge);
 
   // 場所・予約情報
-  const meta =
-    document.createElement("div");
-
-  meta.className =
-    "plan-meta";
+  const meta = document.createElement("div");
+  meta.className = "plan-meta";
 
   if (plan.location) {
-    const location =
-      document.createElement("span");
-
-    location.textContent =
-      `⌖ ${plan.location}`;
+    const location = document.createElement("span");
+    location.textContent = `⌖ ${plan.location}`;
 
     meta.appendChild(location);
   }
 
   if (plan.reservationSite) {
-    const site =
-      document.createElement("span");
-
-    site.textContent =
-      `予約サイト：${plan.reservationSite}`;
+    const site = document.createElement("span");
+    site.textContent = `予約サイト：${plan.reservationSite}`;
 
     meta.appendChild(site);
   }
 
   if (plan.reservationNumber) {
-    const number =
-      document.createElement("span");
-
-    number.textContent =
-      `予約番号：${plan.reservationNumber}`;
+    const number = document.createElement("span");
+    number.textContent = `予約番号：${plan.reservationNumber}`;
 
     meta.appendChild(number);
   }
 
   // 予約状況
-  const reservation =
-    document.createElement("div");
+  const reservation = document.createElement("div");
+  reservation.className = "plan-reservation";
 
-  reservation.className =
-    "plan-reservation";
+  const reservationBadge = document.createElement("span");
 
-  const reservationBadge =
-    document.createElement("span");
+  const reservationClass = getReservationClass(plan.reservationStatus);
 
-  const reservationClass =
-    getReservationClass(
-      plan.reservationStatus
-    );
-
-  reservationBadge.className =
-    `reservation-badge ${reservationClass}`;
-
+  reservationBadge.className = `reservation-badge ${reservationClass}`;
   reservationBadge.textContent =
     RESERVATION_LABELS[
       plan.reservationStatus
@@ -1172,32 +890,21 @@ function createHotelPlanElement(plan, event) {
   );
 
   // メモ
-  const memo =
-    document.createElement("p");
-
-  memo.className =
-    "plan-memo";
-
-  memo.textContent =
-    plan.memo || "";
+  const memo = document.createElement("p");
+  memo.className = "plan-memo";
+  memo.textContent = plan.memo || "";
 
   if (!plan.memo) {
     memo.classList.add("hidden");
   }
 
   // 下段
-  const bottom =
-    document.createElement("div");
-
-  bottom.className =
-    "plan-bottom";
+  const bottom = document.createElement("div");
+  bottom.className = "plan-bottom";
 
   // 金額
-  const amount =
-    document.createElement("span");
-
-  amount.className =
-    "plan-amount";
+  const amount = document.createElement("span");
+  amount.className = "plan-amount";
 
   if (
     plan.amount !== null &&
@@ -1211,24 +918,14 @@ function createHotelPlanElement(plan, event) {
   }
 
   // 操作ボタン
-  const actions =
-    document.createElement("div");
-
-  actions.className =
-    "plan-actions";
+  const actions = document.createElement("div");
+  actions.className = "plan-actions";
 
   // 編集
-  const editButton =
-    document.createElement("button");
-
+  const editButton = document.createElement("button");
   editButton.type = "button";
-
-  editButton.className =
-    "plan-action-button";
-
-  editButton.textContent =
-    "編集";
-
+  editButton.className = "plan-action-button";
+  editButton.textContent = "編集";
   editButton.addEventListener(
     "click",
     () => {
@@ -1237,17 +934,10 @@ function createHotelPlanElement(plan, event) {
   );
 
   // 削除
-  const deleteButton =
-    document.createElement("button");
-
+  const deleteButton = document.createElement("button");
   deleteButton.type = "button";
-
-  deleteButton.className =
-    "plan-action-button delete";
-
-  deleteButton.textContent =
-    "削除";
-
+  deleteButton.className = "plan-action-button delete";
+  deleteButton.textContent = "削除";
   deleteButton.addEventListener(
     "click",
     () => {
@@ -1281,8 +971,7 @@ function createHotelPlanElement(plan, event) {
 function openCreateEventModal() {
   eventFormElement.reset();
 
-  modalTitleElement.textContent =
-    "新しいイベント";
+  modalTitleElement.textContent = "新しいイベント";
 
   eventIdInput.value = "";
 
@@ -1291,9 +980,7 @@ function openCreateEventModal() {
 
   updateColorValue();
 
-  eventModalElement.classList.remove(
-    "hidden"
-  );
+  eventModalElement.classList.remove("hidden");
 
   setTimeout(() => {
     eventTitleInput.focus();
@@ -1301,41 +988,26 @@ function openCreateEventModal() {
 }
 
 function openEditEventModal(eventId) {
-  const event =
-    findEventById(eventId);
+  const event = findEventById(eventId);
 
   if (!event) {
     return;
   }
 
-  modalTitleElement.textContent =
-    "イベントを編集";
+  modalTitleElement.textContent = "イベントを編集";
 
   eventIdInput.value = event.id;
   eventTitleInput.value = event.title || "";
-  eventStartDateInput.value =
-    event.startDate || "";
-
-  eventEndDateInput.value =
-    event.endDate || "";
-
-  eventLocationInput.value =
-    event.location || "";
-
-  eventStatusInput.value =
-    event.status || "preparing";
-
-  eventColorInput.value =
-    event.color || "#245eff";
-
-  eventMemoInput.value =
-    event.memo || "";
+  eventStartDateInput.value = event.startDate || "";
+  eventEndDateInput.value = event.endDate || "";
+  eventLocationInput.value = event.location || "";
+  eventStatusInput.value = event.status || "preparing";
+  eventColorInput.value = event.color || "#245eff";
+  eventMemoInput.value = event.memo || "";
 
   updateColorValue();
 
-  eventModalElement.classList.remove(
-    "hidden"
-  );
+  eventModalElement.classList.remove("hidden");
 
   setTimeout(() => {
     eventTitleInput.focus();
@@ -1343,46 +1015,22 @@ function openEditEventModal(eventId) {
 }
 
 function updatePlanFieldsByType() {
-  const isHotel =
-    planTypeInput.value === "hotel";
+  const isHotel = planTypeInput.value === "hotel";
 
-  normalPlanFields.classList.toggle(
-    "hidden",
-    isHotel
-  );
-
-  hotelPlanFields.classList.toggle(
-    "hidden",
-    !isHotel
-  );
+  normalPlanFields.classList.toggle("hidden", isHotel);
+  hotelPlanFields.classList.toggle("hidden", !isHotel);
 }
 
-planTypeInput.addEventListener(
-  "change",
-  updatePlanFieldsByType
-);
+planTypeInput.addEventListener("change", updatePlanFieldsByType);
 
 function saveEventFromForm() {
-  const title =
-    eventTitleInput.value.trim();
-
-  const startDate =
-    eventStartDateInput.value;
-
-  const endDate =
-    eventEndDateInput.value;
-
-  const location =
-    eventLocationInput.value.trim();
-
-  const status =
-    eventStatusInput.value;
-
-  const color =
-    eventColorInput.value;
-
-  const memo =
-    eventMemoInput.value.trim();
+  const title = eventTitleInput.value.trim();
+  const startDate = eventStartDateInput.value;
+  const endDate = eventEndDateInput.value;
+  const location = eventLocationInput.value.trim();
+  const status = eventStatusInput.value;
+  const color = eventColorInput.value;
+  const memo = eventMemoInput.value.trim();
 
   if (!title) {
     alert("イベント名を入力してください。");
@@ -1401,8 +1049,7 @@ function saveEventFromForm() {
     return;
   }
 
-  const editingEventId =
-    eventIdInput.value;
+  const editingEventId = eventIdInput.value;
 
   if (editingEventId) {
     const targetEvent =
@@ -1440,7 +1087,6 @@ function saveEventFromForm() {
       payments: [],
       shopping: []
     };
-
     appData.events.push(newEvent);
   }
 
@@ -1463,8 +1109,7 @@ function saveEventFromForm() {
 }
 
 function deleteEvent(eventId) {
-  const event =
-    findEventById(eventId);
+  const event = findEventById(eventId);
 
   if (!event) {
     return;
@@ -1493,24 +1138,20 @@ function deleteEvent(eventId) {
   }
 }
 
+
 /* =========================
    メモ
 ========================= */
-
 function openMemoModal() {
-  const event =
-    findEventById(currentEventId);
+  const event = findEventById(currentEventId);
 
   if (!event) {
     return;
   }
 
-  memoInput.value =
-    event.memo || "";
+  memoInput.value = event.memo || "";
 
-  memoModalElement.classList.remove(
-    "hidden"
-  );
+  memoModalElement.classList.remove("hidden");
 
   setTimeout(() => {
     memoInput.focus();
@@ -1518,15 +1159,13 @@ function openMemoModal() {
 }
 
 function saveMemo() {
-  const event =
-    findEventById(currentEventId);
+  const event = findEventById(currentEventId);
 
   if (!event) {
     return;
   }
 
-  event.memo =
-    memoInput.value.trim();
+  event.memo = memoInput.value.trim();
 
   saveData();
   renderEventDetail(event);
@@ -1534,18 +1173,15 @@ function saveMemo() {
 }
 
 function closeMemoModal() {
-  memoModalElement.classList.add(
-    "hidden"
-  );
+  memoModalElement.classList.add("hidden");
 }
+
 
 /* =========================
    予定作成・編集
 ========================= */
-
 function openCreatePlanModal() {
-  const event =
-    findEventById(currentEventId);
+  const event = findEventById(currentEventId);
 
   if (!event) {
     return;
@@ -1553,8 +1189,7 @@ function openCreatePlanModal() {
 
   planFormElement.reset();
 
-  planModalTitleElement.textContent =
-    "予定を追加";
+  planModalTitleElement.textContent = "予定を追加";
 
   planIdInput.value = "";
 
@@ -1566,18 +1201,12 @@ function openCreatePlanModal() {
   hotelCheckoutTimeInput.value = "";
   updatePlanFieldsByType();
   
-  planReservationStatusInput.value =
-    "unreserved";
+  planReservationStatusInput.value = "unreserved";
 
-  /*
-   * イベント開始日を初期値にする
-   */
-  planDateInput.value =
-    event.startDate || "";
+  // イベント開始日を初期値にする
+  planDateInput.value = event.startDate || "";
 
-  planModalElement.classList.remove(
-    "hidden"
-  );
+  planModalElement.classList.remove("hidden");
 
   setTimeout(() => {
     planTitleInput.focus();
@@ -1585,8 +1214,7 @@ function openCreatePlanModal() {
 }
 
 function openEditPlanModal(planId) {
-  const event =
-    findEventById(currentEventId);
+  const event = findEventById(currentEventId);
 
   if (!event) {
     return;
@@ -1601,59 +1229,33 @@ function openEditPlanModal(planId) {
     return;
   }
 
-  planModalTitleElement.textContent =
-    "予定を編集";
+  planModalTitleElement.textContent = "予定を編集";
 
   planIdInput.value = plan.id;
   planTitleInput.value = plan.title || "";
   planTypeInput.value = plan.type || "other";
 
   if (plan.type === "hotel") {
-    hotelCheckinDateInput.value =
-      plan.checkInDate || plan.date || "";
-
-    hotelCheckinTimeInput.value =
-      plan.checkInTime || plan.startTime || "";
-
-    hotelCheckoutDateInput.value =
-      plan.checkOutDate || plan.date || "";
-
-    hotelCheckoutTimeInput.value =
-      plan.checkOutTime || plan.endTime || "";
+    hotelCheckinDateInput.value = plan.checkInDate || plan.date || "";
+    hotelCheckinTimeInput.value = plan.checkInTime || plan.startTime || "";
+    hotelCheckoutDateInput.value = plan.checkOutDate || plan.date || "";
+    hotelCheckoutTimeInput.value = plan.checkOutTime || plan.endTime || "";
   } else {
-    planDateInput.value =
-      plan.date || "";
-
-    planStartTimeInput.value =
-      plan.startTime || "";
-
-    planEndTimeInput.value =
-      plan.endTime || "";
+    planDateInput.value = plan.date || "";
+    planStartTimeInput.value = plan.startTime || "";
+    planEndTimeInput.value = plan.endTime || "";
   }
 
   updatePlanFieldsByType();
 
-  planLocationInput.value =
-    plan.location || "";
+  planLocationInput.value = plan.location || "";
+  planReservationStatusInput.value = plan.reservationStatus || "unreserved";
+  planReservationSiteInput.value = plan.reservationSite || "";
+  planReservationNumberInput.value = plan.reservationNumber || "";
+  planAmountInput.value = plan.amount ?? "";
+  planMemoInput.value = plan.memo || "";
 
-  planReservationStatusInput.value =
-    plan.reservationStatus || "unreserved";
-
-  planReservationSiteInput.value =
-    plan.reservationSite || "";
-
-  planReservationNumberInput.value =
-    plan.reservationNumber || "";
-
-  planAmountInput.value =
-    plan.amount ?? "";
-
-  planMemoInput.value =
-    plan.memo || "";
-
-  planModalElement.classList.remove(
-    "hidden"
-  );
+  planModalElement.classList.remove("hidden");
 
   setTimeout(() => {
     planTitleInput.focus();
@@ -1661,18 +1263,15 @@ function openEditPlanModal(planId) {
 }
 
 function savePlanFromForm() {
-  const event =
-    findEventById(currentEventId);
+  const event = findEventById(currentEventId);
 
   if (!event) {
     return;
   }
 
-  const title =
-    planTitleInput.value.trim();
+  const title = planTitleInput.value.trim();
 
-  const type =
-    planTypeInput.value;
+  const type = planTypeInput.value;
 
   let date = "";
   let startTime = "";
@@ -1684,17 +1283,10 @@ function savePlanFromForm() {
   let checkOutTime = "";
 
   if (type === "hotel") {
-    checkInDate =
-      hotelCheckinDateInput.value;
-
-    checkInTime =
-      hotelCheckinTimeInput.value;
-
-    checkOutDate =
-      hotelCheckoutDateInput.value;
-
-    checkOutTime =
-      hotelCheckoutTimeInput.value;
+    checkInDate = hotelCheckinDateInput.value;
+    checkInTime = hotelCheckinTimeInput.value;
+    checkOutDate = hotelCheckoutDateInput.value;
+    checkOutTime = hotelCheckoutTimeInput.value;
 
     if (!checkInDate) {
       alert("チェックイン日を入力してください。");
@@ -1727,33 +1319,17 @@ function savePlanFromForm() {
     endTime = checkOutTime;
 
   } else {
-    date =
-      planDateInput.value;
-
-    startTime =
-      planStartTimeInput.value;
-
-    endTime =
-      planEndTimeInput.value;
+    date = planDateInput.value;
+    startTime = planStartTimeInput.value;
+    endTime = planEndTimeInput.value;
   }
 
-  const location =
-    planLocationInput.value.trim();
-
-  const reservationStatus =
-    planReservationStatusInput.value;
-
-  const reservationSite =
-    planReservationSiteInput.value.trim();
-
-  const reservationNumber =
-    planReservationNumberInput.value.trim();
-
-  const amountValue =
-    planAmountInput.value;
-
-  const memo =
-    planMemoInput.value.trim();
+  const location = planLocationInput.value.trim();
+  const reservationStatus = planReservationStatusInput.value;
+  const reservationSite = planReservationSiteInput.value.trim();
+  const reservationNumber = planReservationNumberInput.value.trim();
+  const amountValue = planAmountInput.value;
+  const memo = planMemoInput.value.trim();
 
   if (!title) {
     alert("予定名を入力してください。");
@@ -1770,8 +1346,7 @@ function savePlanFromForm() {
       ? null
       : Number(amountValue);
 
-  const editingPlanId =
-    planIdInput.value;
+  const editingPlanId = planIdInput.value;
 
   if (editingPlanId) {
     const targetPlan =
@@ -1796,12 +1371,9 @@ function savePlanFromForm() {
     targetPlan.checkOutTime = checkOutTime;
 
     targetPlan.location = location;
-    targetPlan.reservationStatus =
-      reservationStatus;
-    targetPlan.reservationSite =
-      reservationSite;
-    targetPlan.reservationNumber =
-      reservationNumber;
+    targetPlan.reservationStatus = reservationStatus;
+    targetPlan.reservationSite = reservationSite;
+    targetPlan.reservationNumber = reservationNumber;
     targetPlan.amount = amount;
     targetPlan.memo = memo;
   } else {
@@ -1833,10 +1405,10 @@ function savePlanFromForm() {
   closePlanModal();
 }
 
+
 /* =========================
    予定削除
 ========================= */
-
 function openDeletePlanModal(planId) {
   deleteTargetPlanId = planId;
 
@@ -1854,8 +1426,7 @@ function closeDeletePlanModal() {
 }
 
 function deletePlan() {
-  const event =
-    findEventById(currentEventId);
+  const event = findEventById(currentEventId);
 
   if (!event || !deleteTargetPlanId) {
     closeDeletePlanModal();
@@ -1891,10 +1462,10 @@ function deletePlan() {
   closeDeletePlanModal();
 }
 
+
 /* =========================
    モーダル操作
 ========================= */
-
 function closeEventModal() {
   eventModalElement.classList.add(
     "hidden"
@@ -1907,16 +1478,13 @@ function closePlanModal() {
   );
 }
 
+
 /* =========================
    ページ切り替え
 ========================= */
-
 function switchPage(pageId) {
-  const pages =
-    document.querySelectorAll(".page");
-
-  const navigationButtons =
-    document.querySelectorAll(".nav-button");
+  const pages = document.querySelectorAll(".page");
+  const navigationButtons = document.querySelectorAll(".nav-button");
 
   pages.forEach((page) => {
     page.classList.toggle(
@@ -1926,12 +1494,9 @@ function switchPage(pageId) {
   });
 
   navigationButtons.forEach((button) => {
-    /*
-     * 詳細ページ表示中はイベントタブを選択状態にする
-     */
-    const isEventPage =
-      pageId === "events-page" ||
-      pageId === "detail-page";
+
+    // 詳細ページ表示中はイベントタブを選択状態にする
+    const isEventPage = pageId === "events-page" || pageId === "detail-page";
 
     if (
       isEventPage &&
@@ -1953,10 +1518,10 @@ function switchPage(pageId) {
   });
 }
 
+
 /* =========================
    補助関数
 ========================= */
-
 function findEventById(eventId) {
   return appData.events.find(
     (event) => event.id === eventId
@@ -1994,15 +1559,13 @@ function formatDateRange(startDate, endDate) {
     return "日付未設定";
   }
 
-  const start =
-    formatDate(startDate);
+  const start = formatDate(startDate);
 
   if (!endDate || endDate === startDate) {
     return start;
   }
 
-  const end =
-    formatDate(endDate);
+  const end = formatDate(endDate);
 
   return `${start} - ${end}`;
 }
@@ -2012,8 +1575,7 @@ function formatDate(dateString) {
     return "";
   }
 
-  const date =
-    new Date(`${dateString}T00:00:00`);
+  const date = new Date(`${dateString}T00:00:00`);
 
   if (Number.isNaN(date.getTime())) {
     return dateString;
@@ -2055,8 +1617,7 @@ function formatShortDate(dateString) {
     return "--/--";
   }
 
-  const date =
-    new Date(`${dateString}T00:00:00`);
+  const date = new Date(`${dateString}T00:00:00`);
 
   if (Number.isNaN(date.getTime())) {
     return dateString;
@@ -2113,11 +1674,11 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+
 /* =====================================================
    Phase 3: 同行者・人ごとの精算・予算管理
 ===================================================== */
 (function setupPhase3() {
-
   const yen = v =>
     `¥${Number(v || 0).toLocaleString("ja-JP")}`;
 
@@ -2227,7 +1788,6 @@ function escapeHtml(value) {
 
 
   function fillPlanPeople() {
-
     const payer = document.getElementById("plan-payer");
 
     if (!payer) return;
@@ -2241,8 +1801,7 @@ function escapeHtml(value) {
       )
       .join("");
 
-    const box =
-      document.getElementById("plan-target-people");
+    const box = document.getElementById("plan-target-people");
 
     if (!box) return;
 
@@ -2273,7 +1832,6 @@ function escapeHtml(value) {
 
 
   function readSettlementFromPlan() {
-
     const enabled =
       document.getElementById(
         "plan-settlement-enabled"
@@ -2316,7 +1874,6 @@ function escapeHtml(value) {
 
 
   function showPlanSettlement(p) {
-
     const s = p.settlement;
 
     if (!s?.enabled || !planAmount(p)) {
@@ -2335,14 +1892,10 @@ function escapeHtml(value) {
     `;
   }
 
-
-  const originalOpenCreate =
-    window.openCreatePlanModal;
+  const originalOpenCreate = window.openCreatePlanModal;
 
   window.openCreatePlanModal = function () {
-
     originalOpenCreate();
-
     fillPlanPeople();
 
     document.getElementById(
@@ -2359,17 +1912,12 @@ function escapeHtml(value) {
   };
 
 
-  const originalOpenEdit =
-    window.openEditPlanModal;
-
+  const originalOpenEdit = window.openEditPlanModal;
   window.openEditPlanModal = function (pid) {
-
     originalOpenEdit(pid);
-
     fillPlanPeople();
 
     const e = findEventById(currentEventId);
-
     const p = e?.plans.find(
       x => x.id === pid
     );
@@ -2406,13 +1954,9 @@ function escapeHtml(value) {
   };
 
 
-  const originalSave =
-    window.savePlanFromForm;
-
+  const originalSave = window.savePlanFromForm;
   window.savePlanFromForm = function () {
-
     const e = findEventById(currentEventId);
-
     const before = e?.plans.find(
       p =>
         p.id ===
@@ -2455,9 +1999,7 @@ function escapeHtml(value) {
 
 
   function renderPeople() {
-
-    const el =
-      document.getElementById("people-list");
+    const el = document.getElementById("people-list");
 
     if (!el) return;
 
@@ -2502,7 +2044,6 @@ function escapeHtml(value) {
 
 
   function renderSettlements() {
-
     const sum =
       document.getElementById(
         "settlement-summary"
@@ -2581,8 +2122,7 @@ function escapeHtml(value) {
         .map(({ event: e, plan: p }) => {
 
           const targets = targetIds(p);
-          const each =
-            planAmount(p) / targets.length;
+          const each = planAmount(p) / targets.length;
 
           const paid =
             payerId(p) === pid
@@ -2633,9 +2173,7 @@ function escapeHtml(value) {
 
 
   document.addEventListener("click", e => {
-
-    const b =
-      e.target.closest("[data-settle-plan]");
+    const b = e.target.closest("[data-settle-plan]");
 
     if (!b) return;
 
@@ -2662,11 +2200,8 @@ function escapeHtml(value) {
   });
 
 
-  const originalRender =
-    window.renderEventDetail;
-
+  const originalRender = window.renderEventDetail;
   window.renderEventDetail = function (e) {
-
     originalRender(e);
 
     const paper =
@@ -2682,14 +2217,9 @@ function escapeHtml(value) {
       );
 
     if (!sec) {
-
       sec = document.createElement("div");
-
-      sec.id =
-        "detail-money-section";
-
-      sec.className =
-        "note-section";
+      sec.id = "detail-money-section";
+      sec.className = "note-section";
 
       paper.append(
         document.createElement("div")
@@ -2802,7 +2332,6 @@ function escapeHtml(value) {
 
 
   document.addEventListener("click", e => {
-
     const b =
       e.target.closest(
         "[data-person-summary]"
@@ -2810,9 +2339,7 @@ function escapeHtml(value) {
 
     if (!b) return;
 
-    const pid =
-      b.dataset.personSummary;
-
+    const pid = b.dataset.personSummary;
     const list =
       document.getElementById(
         "settlement-list"
@@ -2854,7 +2381,6 @@ function escapeHtml(value) {
 
 
   document.addEventListener("click", e => {
-
     if (
       e.target.closest(
         "[data-close-person-details]"
@@ -2910,5 +2436,4 @@ function escapeHtml(value) {
       renderAll();
     }
   );
-
 })();

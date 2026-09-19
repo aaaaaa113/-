@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -17,14 +16,12 @@
 
 <body>
   <div class="app">
-
     <main class="main-content">
 
       <!-- =========================
            イベント一覧
       ========================== -->
       <section id="events-page" class="page active-page">
-
         <header class="page-header">
           <div>
             <p class="eyebrow">MY LIVE & TRIP NOTE</p>
@@ -79,7 +76,6 @@
            イベント詳細ノート
       ========================== -->
       <section id="detail-page" class="page">
-
         <header class="detail-header">
           <button
             id="back-to-events-button"
@@ -137,7 +133,6 @@
         </div>
 
         <div class="note-paper">
-
           <div class="note-section">
             <div class="section-heading">
               <span class="section-number">01</span>
@@ -167,7 +162,6 @@
           <div class="note-divider"></div>
 
           <div class="note-section">
-
             <div class="section-heading">
               <span class="section-number">02</span>
 
@@ -197,7 +191,6 @@
               ＋ 予定を追加
             </button>
           </div>
-
         </div>
       </section>
 
@@ -205,7 +198,6 @@
            精算帳
       ========================== -->
       <section id="settlements-page" class="page">
-
         <header class="page-header simple-header">
           <div>
             <p class="eyebrow">MONEY MANAGEMENT</p>
@@ -224,7 +216,6 @@
            設定
       ========================== -->
       <section id="settings-page" class="page">
-
         <header class="page-header simple-header">
           <div>
             <p class="eyebrow">APP SETTINGS</p>
@@ -278,7 +269,6 @@
 
             <span class="setting-status">Future</span>
           </div>
-
         </div>
       </section>
     </main>
@@ -287,7 +277,6 @@
          下部ナビゲーション
     ========================== -->
     <nav class="bottom-navigation">
-
       <button
         class="nav-button active"
         data-page="events-page"
@@ -314,7 +303,6 @@
         <span class="nav-icon">⚙</span>
         <span class="nav-label">設定</span>
       </button>
-
     </nav>
   </div>
 
@@ -345,9 +333,7 @@
       </div>
 
       <form id="event-form">
-
         <input id="event-id" type="hidden" />
-
         <div class="form-group">
           <label for="event-title">
             イベント名 <span class="required-mark">*</span>
@@ -544,7 +530,6 @@
       </div>
 
       <form id="plan-form">
-
         <input id="plan-id" type="hidden" />
 
         <div class="form-group">
@@ -577,16 +562,12 @@
 
         <!-- 通常の予定用 -->
         <div id="normal-plan-fields">
-
           <div class="form-group">
             <label for="plan-date">
               日付 <span class="required-mark">*</span>
             </label>
 
-            <input
-              id="plan-date"
-              type="date"
-            />
+            <input id="plan-date" type="date" />
           </div>
 
           <div class="form-row">
@@ -595,10 +576,7 @@
                 開始時刻
               </label>
 
-              <input
-                id="plan-start-time"
-                type="time"
-              />
+              <input id="plan-start-time" type="time" />
             </div>
 
             <div class="form-group">
@@ -606,10 +584,7 @@
                 終了時刻
               </label>
 
-              <input
-                id="plan-end-time"
-                type="time"
-              />
+              <input id="plan-end-time" type="time" />
             </div>
           </div>
 
@@ -617,13 +592,8 @@
 
 
         <!-- 宿泊専用 -->
-        <div
-          id="hotel-plan-fields"
-          class="hidden"
-        >
-
+        <div id="hotel-plan-fields" class="hidden">
           <div class="form-row">
-
             <div class="form-group">
               <label for="hotel-checkin-date">
                 チェックイン日
@@ -646,12 +616,9 @@
                 type="time"
               />
             </div>
-
           </div>
 
-
           <div class="form-row">
-
             <div class="form-group">
               <label for="hotel-checkout-date">
                 チェックアウト日
@@ -674,9 +641,7 @@
                 type="time"
               />
             </div>
-
           </div>
-
         </div>
 
         <div class="form-group">
@@ -744,12 +709,31 @@
         <div class="form-group full">
           <label>精算設定（任意）</label>
           <div class="plan-settlement-grid">
-            <label><input id="plan-settlement-enabled" type="checkbox" /> 精算対象にする</label>
-            <label>立替者<select id="plan-payer"></select></label>
-            <label>支払対象者<select id="plan-target-mode"><option value="all">登録済み同行者全員</option><option value="custom">個別に選ぶ</option></select></label>
+            <label>
+              <input id="plan-settlement-enabled" type="checkbox" /> 
+              精算対象にする
+            </label>
+
+            <label>
+              立替者 <select id="plan-payer"> </select>
+            </label>
+
+            <label>
+              支払対象者
+              <select id="plan-target-mode">
+                <option value="all">
+                  登録済み同行者全員
+                </option>
+                <option value="custom">
+                  個別に選ぶ
+                </option>
+              </select>
+            </label>
           </div>
           <div id="plan-target-people" class="payment-targets hidden"></div>
-          <p class="form-help">金額は予定全体の合計です。対象者人数で割って1人あたりの負担額を計算します。</p>
+          <p class="form-help">
+            金額は予定全体の合計です。対象者人数で割って1人あたりの負担額を計算します。
+          </p>
         </div>
 
         <div class="form-group">
