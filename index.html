@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+
+  <meta name="theme-color" content="#111116" />
+
+  <title>遠征ノート</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="app">
+
+    <main class="main-content">
+
+      <!-- =========================
+           イベント一覧
+      ========================== -->
+      <section id="events-page" class="page active-page">
+
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">MY LIVE & TRIP NOTE</p>
+            <h1>遠征ノート</h1>
+            <p class="page-description">
+              ライブと遠征の記録をまとめよう
+            </p>
+          </div>
+
+          <button
+            id="open-create-event-button"
+            class="primary-button"
+            type="button"
+          >
+            ＋ 新規作成
+          </button>
+        </header>
+
+        <div class="event-summary">
+          <div>
+            <span class="summary-label">MY EVENTS</span>
+            <strong id="event-count">0</strong>
+            <span class="summary-unit">件</span>
+          </div>
+
+          <div class="summary-decoration">✦</div>
+        </div>
+
+        <div id="event-list" class="event-list"></div>
+
+        <div id="empty-event-message" class="empty-state hidden">
+          <div class="empty-icon">✦</div>
+
+          <h2>まだイベントがありません</h2>
+
+          <p>
+            最初の遠征やライブを登録して<br />
+            あなただけのノートを作りましょう。
+          </p>
+
+          <button
+            id="empty-create-button"
+            class="primary-button"
+            type="button"
+          >
+            ＋ イベントを作成
+          </button>
+        </div>
+      </section>
+
+      <!-- =========================
+           イベント詳細ノート
+      ========================== -->
+      <section id="detail-page" class="page">
+
+        <header class="detail-header">
+          <button
+            id="back-to-events-button"
+            class="back-button"
+            type="button"
+          >
+            ← イベント一覧
+          </button>
+
+          <div class="detail-header-actions">
+            <button
+              id="detail-edit-event-button"
+              class="secondary-button small-button"
+              type="button"
+            >
+              イベント編集
+            </button>
+          </div>
+        </header>
+
+        <div
+          id="detail-cover"
+          class="detail-cover"
+        >
+          <div class="detail-cover-top">
+            <span class="detail-cover-label">
+              MY LIVE / TRIP NOTE
+            </span>
+
+            <span id="detail-event-number">
+              No.001
+            </span>
+          </div>
+
+          <h1 id="detail-event-title">
+            イベント名
+          </h1>
+
+          <div class="detail-cover-meta">
+            <span id="detail-event-date">
+              日付未設定
+            </span>
+
+            <span id="detail-event-location">
+              場所未設定
+            </span>
+          </div>
+
+          <span
+            id="detail-event-status"
+            class="status-badge"
+          >
+            準備中
+          </span>
+        </div>
+
+        <div class="note-paper">
+
+          <div class="note-section">
+            <div class="section-heading">
+              <span class="section-number">01</span>
+
+              <div>
+                <p class="eyebrow">MEMO</p>
+                <h2>イベントメモ</h2>
+              </div>
+            </div>
+
+            <p
+              id="detail-event-memo"
+              class="note-memo"
+            >
+              まだメモはありません。
+            </p>
+
+            <button
+              id="edit-event-memo-button"
+              class="text-button"
+              type="button"
+            >
+              メモを編集する →
+            </button>
+          </div>
+
+          <div class="note-divider"></div>
+
+          <div class="note-section">
+
+            <div class="section-heading">
+              <span class="section-number">02</span>
+
+              <div>
+                <p class="eyebrow">SCHEDULE</p>
+                <h2>遠征スケジュール</h2>
+              </div>
+            </div>
+
+            <div
+              id="plan-list"
+              class="plan-list"
+            ></div>
+
+            <div
+              id="empty-plan-message"
+              class="empty-plan-message"
+            >
+              まだ予定がありません。
+            </div>
+
+            <button
+              id="open-create-plan-button"
+              class="primary-button full-button"
+              type="button"
+            >
+              ＋ 予定を追加
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =========================
+           精算帳
+      ========================== -->
+      <section id="settlements-page" class="page">
+
+        <header class="page-header simple-header">
+          <div>
+            <p class="eyebrow">MONEY MANAGEMENT</p>
+            <h1>精算帳</h1>
+            <p class="page-description">
+              全イベントの精算をまとめて管理
+            </p>
+          </div>
+        </header>
+
+        <div id="settlement-summary" class="settlement-summary"></div>
+        <div id="settlement-list" class="settlement-list"></div>
+      </section>
+
+      <!-- =========================
+           設定
+      ========================== -->
+      <section id="settings-page" class="page">
+
+        <header class="page-header simple-header">
+          <div>
+            <p class="eyebrow">APP SETTINGS</p>
+            <h1>設定</h1>
+            <p class="page-description">
+              アプリの設定とデータ管理
+            </p>
+          </div>
+        </header>
+
+        <div class="people-manager">
+          <div class="section-heading">
+            <span class="section-number">01</span>
+            <div>
+              <p class="eyebrow">COMPANIONS</p>
+              <h2>同行者マスター</h2>
+            </div>
+          </div>
+          <p class="page-description">精算で使う同行者を登録します。</p>
+          <form id="person-form" class="inline-form">
+            <input id="person-name" type="text" placeholder="同行者の名前" required />
+            <button class="primary-button" type="submit">＋ 追加</button>
+          </form>
+          <div id="people-list" class="people-list"></div>
+        </div>
+
+        <div class="settings-list">
+
+          <div class="setting-item">
+            <div>
+              <strong>同行者マスター</strong>
+              <p>友人や同行者の登録</p>
+            </div>
+
+            <span class="setting-status">Phase 3</span>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <strong>データのバックアップ</strong>
+              <p>JSON書き出し・復元</p>
+            </div>
+
+            <span class="setting-status">Phase 5</span>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <strong>画像アップロード</strong>
+              <p>イベント画像の登録</p>
+            </div>
+
+            <span class="setting-status">Phase 5</span>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <strong>同期・アカウント</strong>
+              <p>将来的なクラウド同期</p>
+            </div>
+
+            <span class="setting-status">Future</span>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- =========================
+         下部ナビゲーション
+    ========================== -->
+    <nav class="bottom-navigation">
+
+      <button
+        class="nav-button active"
+        data-page="events-page"
+        type="button"
+      >
+        <span class="nav-icon">▣</span>
+        <span class="nav-label">イベント</span>
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="settlements-page"
+        type="button"
+      >
+        <span class="nav-icon">￥</span>
+        <span class="nav-label">精算帳</span>
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="settings-page"
+        type="button"
+      >
+        <span class="nav-icon">⚙</span>
+        <span class="nav-label">設定</span>
+      </button>
+
+    </nav>
+  </div>
+
+  <!-- =========================
+       イベント作成・編集モーダル
+  ========================== -->
+  <div id="event-modal" class="modal-overlay hidden">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">EVENT EDITOR</p>
+          <h2 id="modal-title">新しいイベント</h2>
+        </div>
+
+        <button
+          id="close-modal-button"
+          class="icon-button"
+          type="button"
+          aria-label="閉じる"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="event-form">
+
+        <input id="event-id" type="hidden" />
+
+        <div class="form-group">
+          <label for="event-title">
+            イベント名 <span class="required-mark">*</span>
+          </label>
+
+          <input
+            id="event-title"
+            type="text"
+            placeholder="例：推しのライブ大阪遠征"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="event-start-date">
+              開始日 <span class="required-mark">*</span>
+            </label>
+
+            <input
+              id="event-start-date"
+              type="date"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="event-end-date">
+              終了日
+            </label>
+
+            <input
+              id="event-end-date"
+              type="date"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="event-location">
+            開催地・遠征先
+          </label>
+
+          <input
+            id="event-location"
+            type="text"
+            placeholder="例：大阪"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="event-status">
+            ステータス
+          </label>
+
+          <select id="event-status">
+            <option value="planned">参戦予定</option>
+            <option value="completed">完了</option>
+            <option value="on_hold">保留</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="event-color">
+            推しカラー
+          </label>
+
+          <div class="color-input-row">
+            <input
+              id="event-color"
+              type="color"
+              value="#245eff"
+            />
+
+            <span id="color-value">#245EFF</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="event-memo">
+            メモ
+          </label>
+
+          <textarea
+            id="event-memo"
+            rows="4"
+            placeholder="持ち物、会場情報、注意事項など"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button
+            id="cancel-modal-button"
+            class="secondary-button"
+            type="button"
+          >
+            キャンセル
+          </button>
+
+          <button
+            class="primary-button"
+            type="submit"
+          >
+            保存する
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================
+       メモ編集モーダル
+  ========================== -->
+  <div id="memo-modal" class="modal-overlay hidden">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="memo-modal-title"
+    >
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">EVENT MEMO</p>
+          <h2 id="memo-modal-title">イベントメモ</h2>
+        </div>
+
+        <button
+          id="close-memo-modal-button"
+          class="icon-button"
+          type="button"
+          aria-label="閉じる"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="memo-form">
+        <div class="form-group">
+          <label for="memo-input">
+            メモ
+          </label>
+
+          <textarea
+            id="memo-input"
+            rows="7"
+            placeholder="持ち物、会場情報、注意事項など"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button
+            id="cancel-memo-button"
+            class="secondary-button"
+            type="button"
+          >
+            キャンセル
+          </button>
+
+          <button
+            class="primary-button"
+            type="submit"
+          >
+            保存する
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================
+       予定作成・編集モーダル
+  ========================== -->
+  <div id="plan-modal" class="modal-overlay hidden">
+    <div
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="plan-modal-title"
+    >
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">SCHEDULE EDITOR</p>
+          <h2 id="plan-modal-title">予定を追加</h2>
+        </div>
+
+        <button
+          id="close-plan-modal-button"
+          class="icon-button"
+          type="button"
+          aria-label="閉じる"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="plan-form">
+
+        <input id="plan-id" type="hidden" />
+
+        <div class="form-group">
+          <label for="plan-title">
+            予定名 <span class="required-mark">*</span>
+          </label>
+
+          <input
+            id="plan-title"
+            type="text"
+            placeholder="例：東京駅から新大阪へ移動"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="plan-type">
+            種類
+          </label>
+
+          <select id="plan-type">
+            <option value="transport">移動</option>
+            <option value="hotel">宿泊</option>
+            <option value="live">ライブ</option>
+            <option value="sightseeing">観光</option>
+            <option value="food">食事</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+
+        <!-- 通常の予定用 -->
+        <div id="normal-plan-fields">
+
+          <div class="form-group">
+            <label for="plan-date">
+              日付 <span class="required-mark">*</span>
+            </label>
+
+            <input
+              id="plan-date"
+              type="date"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="plan-start-time">
+                開始時刻
+              </label>
+
+              <input
+                id="plan-start-time"
+                type="time"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="plan-end-time">
+                終了時刻
+              </label>
+
+              <input
+                id="plan-end-time"
+                type="time"
+              />
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- 宿泊専用 -->
+        <div
+          id="hotel-plan-fields"
+          class="hidden"
+        >
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="hotel-checkin-date">
+                チェックイン日
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="hotel-checkin-date"
+                type="date"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="hotel-checkin-time">
+                チェックイン時刻
+              </label>
+
+              <input
+                id="hotel-checkin-time"
+                type="time"
+              />
+            </div>
+
+          </div>
+
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="hotel-checkout-date">
+                チェックアウト日
+                <span class="required-mark">*</span>
+              </label>
+
+              <input
+                id="hotel-checkout-date"
+                type="date"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="hotel-checkout-time">
+                チェックアウト時刻
+              </label>
+
+              <input
+                id="hotel-checkout-time"
+                type="time"
+              />
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="plan-location">
+            場所
+          </label>
+
+          <input
+            id="plan-location"
+            type="text"
+            placeholder="例：新大阪駅、ホテル名、会場名"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="plan-reservation-status">
+            予約状況
+          </label>
+
+          <select id="plan-reservation-status">
+            <option value="unreserved">未予約</option>
+            <option value="reserved">予約済</option>
+            <option value="not_required">予約不要</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="plan-reservation-site">
+            予約サイト
+          </label>
+
+          <input
+            id="plan-reservation-site"
+            type="text"
+            placeholder="例：スマートEX、楽天トラベル、公式サイト"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="plan-reservation-number">
+            予約番号
+          </label>
+
+          <input
+            id="plan-reservation-number"
+            type="text"
+            placeholder="予約番号・受付番号など"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="plan-amount">
+            金額
+          </label>
+
+          <input
+            id="plan-amount"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="例：14000"
+          />
+        </div>
+
+        <div class="form-group full">
+          <label>精算設定（任意）</label>
+          <div class="plan-settlement-grid">
+            <label><input id="plan-settlement-enabled" type="checkbox" /> 精算対象にする</label>
+            <label>立替者<select id="plan-payer"></select></label>
+            <label>支払対象者<select id="plan-target-mode"><option value="all">登録済み同行者全員</option><option value="custom">個別に選ぶ</option></select></label>
+          </div>
+          <div id="plan-target-people" class="payment-targets hidden"></div>
+          <p class="form-help">金額は予定全体の合計です。対象者人数で割って1人あたりの負担額を計算します。</p>
+        </div>
+
+        <div class="form-group">
+          <label for="plan-memo">
+            メモ
+          </label>
+
+          <textarea
+            id="plan-memo"
+            rows="4"
+            placeholder="乗車位置、チェックイン時間、注意事項など"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button
+            id="cancel-plan-modal-button"
+            class="secondary-button"
+            type="button"
+          >
+            キャンセル
+          </button>
+
+          <button
+            class="primary-button"
+            type="submit"
+          >
+            保存する
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================
+       予定削除確認モーダル
+  ========================== -->
+  <div id="delete-plan-modal" class="modal-overlay hidden">
+    <div
+      class="modal-card small-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="delete-plan-title"
+    >
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">DELETE SCHEDULE</p>
+          <h2 id="delete-plan-title">
+            予定を削除しますか？
+          </h2>
+        </div>
+
+        <button
+          id="close-delete-plan-modal-button"
+          class="icon-button"
+          type="button"
+          aria-label="閉じる"
+        >
+          ×
+        </button>
+      </div>
+
+      <p class="delete-warning">
+        この操作は取り消せません。
+      </p>
+
+      <div class="form-actions">
+        <button
+          id="cancel-delete-plan-button"
+          class="secondary-button"
+          type="button"
+        >
+          キャンセル
+        </button>
+
+        <button
+          id="confirm-delete-plan-button"
+          class="danger-button"
+          type="button"
+        >
+          削除する
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
