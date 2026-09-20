@@ -68,6 +68,10 @@ const eventStatusInput = document.getElementById("event-status");
 const eventColorInput = document.getElementById("event-color");
 const colorValueElement = document.getElementById("color-value");
 const eventMemoInput = document.getElementById("event-memo");
+const eventImageInput = document.getElementById("event-image");
+const eventImagePreviewElement = document.getElementById("event-image-preview");
+const removeEventImageButton = document.getElementById("remove-event-image-button");
+let selectedEventImage = "";
 
 /* 詳細画面 */
 const detailCoverElement = document.getElementById("detail-cover");
@@ -154,6 +158,87 @@ function setupEventListeners() {
     updateColorValue();
   });
 
+  // 画像プレビュー
+  eventImageInput.addEventListener("change", () => {
+    const file = eventImageInput.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("画像ファイルを選択してください。");
+      eventImageInput.value = "";
+      return;
+    }
+
+    compressImage(file, 1200, 0.8)
+      .then((compressedImage) => {
+        selectedEventImage = compressedImage;
+        updateEventImagePreview();
+      })
+      .catch(() => {
+        alert("画像の処理に失敗しました。");
+        eventImageInput.value = "";
+      });
+  });
+
+  // 画像調整
+  function compressImage(file, maxSize = 1200, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const image = new Image();
+
+        image.onload = () => {
+          let width = image.width;
+          let height = image.height;
+
+          // 長辺が maxSize を超える場合だけ縮小
+          if (width > maxSize || height > maxSize) {
+            if (width >= height) {
+              height = Math.round((height * maxSize) / width);
+              width = maxSize;
+            } else {
+              width = Math.round((width * maxSize) / height);
+              height = maxSize;
+            }
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+
+          ctx.drawImage(image, 0, 0, width, height);
+
+          const compressedImage = canvas.toDataURL(
+            "image/jpeg",
+            quality
+          );
+
+          resolve(compressedImage);
+        };
+
+        image.onerror = () => {
+          reject(new Error("画像の読み込みに失敗しました。"));
+        };
+
+        image.src = reader.result;
+      };
+
+      reader.onerror = () => {
+        reject(new Error("ファイルの読み込みに失敗しました。"));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  removeEventImageButton.addEventListener("click", () => {
+    selectedEventImage = "";
+    eventImageInput.value = "";
+    updateEventImagePreview();
+  });
 
   // 下部タブ
   document
@@ -971,6 +1056,9 @@ function createHotelPlanElement(plan, event) {
 function openCreateEventModal() {
   eventFormElement.reset();
 
+  selectedEventImage = "";
+  updateEventImagePreview();
+
   modalTitleElement.textContent = "新しいイベント";
 
   eventIdInput.value = "";
@@ -1004,6 +1092,9 @@ function openEditEventModal(eventId) {
   eventStatusInput.value = event.status || "preparing";
   eventColorInput.value = event.color || "#245eff";
   eventMemoInput.value = event.memo || "";
+  selectedEventImage = event.image || "";
+
+  updateEventImagePreview();
 
   updateColorValue();
 
@@ -1067,6 +1158,8 @@ function saveEventFromForm() {
     targetEvent.status = status;
     targetEvent.color = color;
     targetEvent.memo = memo;
+    targetEvent.image = selectedEventImage;
+
   } else {
     const newEvent = {
       id: createId("event"),
@@ -1078,7 +1171,8 @@ function saveEventFromForm() {
       endDate,
       location,
 
-      image: "",
+      image: selectedEventImage,
+
       color,
       status,
       memo,
@@ -1663,6 +1757,26 @@ function getReservationClass(status) {
 function updateColorValue() {
   colorValueElement.textContent =
     eventColorInput.value.toUpperCase();
+}
+
+function updateEventImagePreview() {
+  eventImagePreviewElement.innerHTML = "";
+
+  if (!selectedEventImage) {
+    const placeholder = document.createElement("span");
+    placeholder.textContent = "✦";
+
+    eventImagePreviewElement.appendChild(
+      placeholder
+    );
+    return;
+  }
+
+  const image = document.createElement("img");
+  image.src = selectedEventImage;
+  image.alt = "イベント画像プレビュー";
+
+  eventImagePreviewElement.appendChild(image);
 }
 
 function escapeHtml(value) {

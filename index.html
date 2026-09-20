@@ -413,6 +413,41 @@
         </div>
 
         <div class="form-group">
+          <label for="event-image">
+            イベント画像
+          </label>
+
+          <div class="event-image-upload">
+            <div id="event-image-preview" class="event-image-preview">
+              <span>✦</span>
+            </div>
+
+            <input
+              id="event-image"
+              type="file"
+              accept="image/*"
+            />
+
+            <div class="event-image-actions">
+              <label
+                for="event-image"
+                class="secondary-button small-button"
+              >
+                画像を選択
+              </label>
+
+              <button
+                id="remove-event-image-button"
+                class="text-button"
+                type="button"
+              >
+                画像を削除
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label for="event-memo">
             メモ
           </label>
