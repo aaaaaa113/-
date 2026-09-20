@@ -34,7 +34,8 @@ let appData = {
   events: [],
   people: [],
   settings: {
-    theme: "dark"
+    theme: "dark",
+    accentColor: "#245eff"
   }
 };
 
@@ -56,6 +57,13 @@ const deletePlanModalElement = document.getElementById("delete-plan-modal");
 const eventFormElement = document.getElementById("event-form");
 const memoFormElement = document.getElementById("memo-form");
 const planFormElement = document.getElementById("plan-form");
+const storageUsageElement = document.getElementById("storage-usage");
+const storageQuotaElement = document.getElementById("storage-quota");
+const storagePercentElement = document.getElementById("storage-percent");
+const storageImageUsageElement = document.getElementById("storage-image-usage");
+const storageWarningElement = document.getElementById("storage-warning");
+const storageWarningTitleElement = document.getElementById("storage-warning-title");
+const storageWarningMessageElement = document.getElementById("storage-warning-message");
 
 /* イベントフォーム */
 const modalTitleElement = document.getElementById("modal-title");
@@ -108,12 +116,18 @@ const planReservationNumberInput = document.getElementById("plan-reservation-num
 const planAmountInput = document.getElementById("plan-amount");
 const planMemoInput = document.getElementById("plan-memo");
 
+/* 設定タブ */
+const appAccentColorInput = document.getElementById("app-accent-color");
+const appAccentColorValueElement = document.getElementById("app-accent-color-value");
+const localStorageUsageElement = document.getElementById("local-storage-usage");
+
 
 /* =========================
    初期化
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   loadData();
+  applyAppSettings();
   setupEventListeners();
   renderEvents();
 });
@@ -356,6 +370,18 @@ function setupEventListeners() {
   });
 }
 
+appAccentColorInput.addEventListener(
+  "input",
+  () => {
+    const color = appAccentColorInput.value;
+    appData.settings.accentColor = color;
+    appAccentColorValueElement.textContent = color.toUpperCase();
+
+    applyAppSettings();
+    saveData();
+  }
+);
+
 
 /* =========================
    データ保存・読み込み
@@ -380,8 +406,9 @@ function loadData() {
         ? parsedData.people
         : [],
 
-      settings: parsedData.settings || {
-        theme: "dark"
+      settings: {
+        theme: parsedData.settings?.theme || "dark",
+        accentColor: parsedData.settings?.accentColor || "#245eff"
       }
     };
 
@@ -418,7 +445,8 @@ function createEmptyAppData() {
     events: [],
     people: [],
     settings: {
-      theme: "dark"
+      theme: "dark",
+      accentColor: "#245eff"
     }
   };
 }
@@ -428,6 +456,39 @@ function saveData() {
     STORAGE_KEY,
     JSON.stringify(appData)
   );
+}
+
+function applyAppSettings() {
+  const accentColor = appData.settings?.accentColor || "#245eff";
+  document.documentElement.style.setProperty(
+    "--accent",
+    accentColor
+  );
+
+  document.documentElement.style.setProperty(
+    "--accent-soft",
+    hexToRgba(accentColor, 0.15)
+  );
+}
+
+function hexToRgba(hex, alpha) {
+  const value = hex.replace("#", "");
+  const r = parseInt(
+    value.substring(0, 2),
+    16
+  );
+
+  const g = parseInt(
+    value.substring(2, 4),
+    16
+  );
+
+  const b = parseInt(
+    value.substring(4, 6),
+    16
+  );
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
 
@@ -1606,10 +1667,72 @@ function switchPage(pageId) {
     );
   });
 
+  if (pageId === "settings-page") {
+    updateStorageUsage();
+  }
+
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+}
+
+function updateSettingsDisplay() {
+  const accentColor =
+    appData.settings?.accentColor ||
+    "#245eff";
+
+  if (appAccentColorInput) {
+    appAccentColorInput.value =
+      accentColor;
+
+    appAccentColorValueElement.textContent =
+      accentColor.toUpperCase();
+  }
+
+  updateLocalStorageUsage();
+}
+
+/* =========================
+   localStorage使用量を計算
+========================= */
+function updateLocalStorageUsage() {
+  if (!localStorageUsageElement) {
+    return;
+  }
+
+  let totalBytes = 0;
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+
+    if (!key) {
+      continue;
+    }
+
+    const value =
+      localStorage.getItem(key) || "";
+
+    // localStorageはUTF-16文字列として保存されるため
+    // 1文字あたり約2バイトとして概算
+    totalBytes +=
+      (key.length + value.length) * 2;
+  }
+
+  localStorageUsageElement.textContent =
+    formatStorageSize(totalBytes);
+}
+
+function formatStorageSize(bytes) {
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
 
@@ -1786,6 +1909,241 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function updateStorageUsage() {
+  if (
+    !storageUsageElement ||
+    !storageQuotaElement ||
+    !storagePercentElement
+  ) {
+    return;
+  }
+
+  try {
+    const savedData = localStorage.getItem(STORAGE_KEY) || "";
+
+    // アプリ全体の保存容量
+    const usageBytes = new Blob([savedData]).size;
+
+    // イベント画像だけの容量
+    const imageUsageBytes = calculateImageStorageSize();
+    storageUsageElement.textContent = formatStorageSize(usageBytes);
+    storageImageUsageElement.textContent = formatStorageSize(imageUsageBytes);
+
+    // ブラウザの推定容量を取得
+    if (
+      navigator.storage &&
+      navigator.storage.estimate
+    ) {
+      navigator.storage.estimate()
+        .then((estimate) => {
+          const quotaBytes =
+            estimate.quota || 0;
+
+          if (quotaBytes > 0) {
+            const percent =
+              (usageBytes / quotaBytes) * 100;
+
+            storageQuotaElement.textContent = formatStorageSize(quotaBytes);
+            storagePercentElement.textContent = `${percent.toFixed(1)}%`;
+
+            updateStorageWarning(
+              usageBytes,
+              quotaBytes,
+              imageUsageBytes
+            );
+          } else {
+            showStorageWarningByUsage(
+              usageBytes,
+              imageUsageBytes
+            );
+          }
+        })
+        .catch(() => {
+          showStorageWarningByUsage(
+            usageBytes,
+            imageUsageBytes
+          );
+        });
+
+    } else {
+      showStorageWarningByUsage(
+        usageBytes,
+        imageUsageBytes
+      );
+    }
+
+  } catch (error) {
+    console.error(
+      "ストレージ容量の取得に失敗しました。",
+      error
+    );
+
+    storageUsageElement.textContent = "取得できません";
+    storageImageUsageElement.textContent = "取得できません";
+    storageQuotaElement.textContent = "確認できません";
+    storagePercentElement.textContent = "—";
+
+    hideStorageWarning();
+  }
+}
+
+function calculateImageStorageSize() {
+  let totalBytes = 0;
+
+  appData.events.forEach((event) => {
+    if (!event.image) {
+      return;
+    }
+
+    try {
+      const base64Data = event.image.split(",")[1] || "";
+
+      // Base64の実際のバイト数を概算
+      const padding = (base64Data.match(/=*$/) || [""])[0].length;
+
+      const bytes =
+        Math.floor(
+          (base64Data.length * 3) / 4
+        ) - padding;
+
+      totalBytes += bytes;
+
+    } catch (error) {
+      console.warn(
+        "画像容量の計算に失敗しました。",
+        error
+      );
+    }
+  });
+
+  return totalBytes;
+}
+
+function updateStorageWarning(
+  usageBytes,
+  quotaBytes,
+  imageUsageBytes
+) {
+  if (!quotaBytes) {
+    showStorageWarningByUsage(
+      usageBytes,
+      imageUsageBytes
+    );
+    return;
+  }
+
+  const usagePercent = (usageBytes / quotaBytes) * 100;
+
+  // 90%以上 → 強い警告
+  if (usagePercent >= 90) {
+    showStorageWarning(
+      "danger",
+      "⚠️ 保存容量がかなり少なくなっています",
+      "新しいイベントや画像を追加する前に、バックアップや古いデータの整理をおすすめします。"
+    );
+    return;
+  }
+
+  // 80%以上 → 注意
+  if (usagePercent >= 80) {
+    showStorageWarning(
+      "warning",
+      "⚠️ 保存容量に余裕が少なくなっています",
+      "画像を含む新しいイベントを追加すると、容量が不足する可能性があります。"
+    );
+    return;
+  }
+
+  hideStorageWarning();
+}
+
+function showStorageWarningByUsage(
+  usageBytes,
+  imageUsageBytes
+) {
+  //  推定容量が取得できない場合は、使用量そのものを目安に警告する。
+  //  5MBを超えたら注意 10MBを超えたら強い警告
+  const warningThreshold = 5 * 1024 * 1024;
+  const dangerThreshold = 10 * 1024 * 1024;
+
+  if (usageBytes >= dangerThreshold) {
+    showStorageWarning(
+      "danger",
+      "⚠️ 保存データがかなり大きくなっています",
+      "新しいイベントや画像を追加する前に、バックアップや古いデータの整理をおすすめします。"
+    );
+    return;
+  }
+
+  if (usageBytes >= warningThreshold) {
+    showStorageWarning(
+      "warning",
+      "⚠️ 保存データが大きくなっています",
+      "画像を含む新しいイベントを追加する前に、バックアップや古いデータの整理をおすすめします。"
+    );
+    return;
+  }
+
+  hideStorageWarning();
+
+  storageQuotaElement.textContent = "確認できません";
+  storagePercentElement.textContent = "—";
+}
+
+function showStorageWarning(type, title, message) {
+  if (
+    !storageWarningElement ||
+    !storageWarningTitleElement ||
+    !storageWarningMessageElement
+  ) {
+    return;
+  }
+
+  storageWarningElement.hidden = false;
+  storageWarningElement.classList.remove(
+    "warning",
+    "danger"
+  );
+
+  storageWarningElement.classList.add(type);
+  storageWarningTitleElement.textContent = title;
+  storageWarningMessageElement.textContent = message;
+}
+
+function hideStorageWarning() {
+  if (!storageWarningElement) {
+    return;
+  }
+
+  storageWarningElement.hidden = true;
+  storageWarningElement.classList.remove(
+    "warning",
+    "danger"
+  );
+}
+
+function formatStorageSize(bytes) {
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+
+  const kb = bytes / 1024;
+
+  if (kb < 1024) {
+    return `${kb.toFixed(0)} KB`;
+  }
+
+  const mb = kb / 1024;
+
+  if (mb < 1024) {
+    return `${mb.toFixed(2)} MB`;
+  }
+
+  const gb = mb / 1024;
+
+  return `${gb.toFixed(2)} GB`;
 }
 
 

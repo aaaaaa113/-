@@ -1120,6 +1120,37 @@ h2 {
   font-weight: 700;
 }
 
+.setting-color-item {
+  align-items: center;
+}
+
+.setting-color-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting-color-control input[type="color"] {
+  width: 42px;
+  height: 42px;
+
+  padding: 3px;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  background: var(--surface-light);
+
+  cursor: pointer;
+}
+
+.setting-color-control span {
+  color: var(--text-sub);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
 
 /* =========================
    下部ナビゲーション
@@ -2006,4 +2037,77 @@ h2 {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.storage-setting-item {
+  align-items: flex-start;
+}
+
+.storage-setting-content {
+  width: 100%;
+}
+
+.storage-info {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.storage-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.storage-row span {
+  color: var(--text-sub);
+  font-size: 0.9rem;
+}
+
+.storage-row strong {
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.storage-note {
+  margin: 14px 0 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.storage-warning {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+}
+
+.storage-warning strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.storage-warning p {
+  margin: 7px 0 0;
+  color: var(--text-sub);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.storage-warning.warning {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.storage-warning.danger {
+  border-color: rgba(251, 113, 133, 0.5);
+  background: rgba(251, 113, 133, 0.09);
+}
+
+.storage-warning.danger strong {
+  color: var(--danger);
 }

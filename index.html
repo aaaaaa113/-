@@ -243,22 +243,72 @@
             <div id="people-list" class="people-list"></div>
           </div>
 
-          <div class="setting-item">
+          <div class="setting-item setting-color-item">
             <div>
-              <strong>データのバックアップ</strong>
-              <p>JSON書き出し・復元</p>
+              <strong>アクセントカラー</strong>
+              <p>アプリ全体のテーマカラー</p>
             </div>
 
-            <span class="setting-status">Phase 5</span>
+            <div class="setting-color-control">
+              <input
+                id="app-accent-color"
+                type="color"
+                value="#245eff"
+                aria-label="アクセントカラー"
+              />
+
+              <span id="app-accent-color-value">
+                #245EFF
+              </span>
+            </div>
           </div>
 
-          <div class="setting-item">
-            <div>
-              <strong>画像アップロード</strong>
-              <p>イベント画像の登録</p>
-            </div>
+          <div class="setting-item storage-setting-item">
+            <div class="storage-setting-content">
+              <strong>データ保存容量</strong>
 
-            <span class="setting-status">Phase 5</span>
+              <div class="storage-info">
+                <div class="storage-row">
+                  <span>使用量</span>
+                  <strong id="storage-usage">計測中</strong>
+                </div>
+
+                <div class="storage-row">
+                  <span>画像</span>
+                  <strong id="storage-image-usage">計測中</strong>
+                </div>
+
+                <div class="storage-row">
+                  <span>サイトの推定容量</span>
+                  <strong id="storage-quota">計測中</strong>
+                </div>
+
+                <div class="storage-row">
+                  <span>使用率</span>
+                  <strong id="storage-percent">計測中</strong>
+                </div>
+              </div>
+
+              <!-- 容量警告 -->
+              <div
+                id="storage-warning"
+                class="storage-warning"
+                hidden
+              >
+                <strong id="storage-warning-title">
+                  ⚠️ 保存容量に余裕が少なくなっています
+                </strong>
+
+                <p id="storage-warning-message">
+                  新しいイベントや画像を追加する前に、
+                  バックアップや古いデータの整理をおすすめします。
+                </p>
+              </div>
+
+              <p class="storage-note">
+                ※ブラウザによって保存容量の上限を取得できない場合があります
+              </p>
+            </div>
           </div>
 
           <div class="setting-item">
